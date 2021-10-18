@@ -12,7 +12,10 @@ PersonList::PersonList(){
 }
 
 PersonList::~PersonList(){
-    delete [] theList;
+    for(int i = 0; i < numPeople; i++) {
+	delete theList[i];
+} //CHANGE (delete all pointers pointing to Person objects in theList)
+delete[] theList; 
 }
 
 void PersonList::addPerson(const char* child_name, const char* father_name, const char* mother_name){
@@ -35,6 +38,7 @@ void PersonList::addPerson(const char* child_name, const char* father_name, cons
       // father_name is not in the theList so create a new person
       father = new Person(father_name, 0, 0);
       insertIntoList(father);
+         	
     }
     if(mother == 0){
       // mother_name is not in the theList so create a new person
@@ -45,6 +49,7 @@ void PersonList::addPerson(const char* child_name, const char* father_name, cons
     insertIntoList(newChild);
     father->addChild(newChild);
     mother->addChild(newChild);
+    	
 }
 
 void PersonList::insertIntoList(Person *newPerson){

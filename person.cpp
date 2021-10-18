@@ -6,7 +6,7 @@ using std::cout;
 using std::endl;
 
 Person::Person(const char *name_, Person* father_, Person* mother_){
-    name = new char[strlen(name_)];
+    name = new char[strlen(name_)+ 1]; //CHANGED (need to account for ending null char
     strcpy(name, name_);
     father = father_;
     mother = mother_;
@@ -16,7 +16,9 @@ Person::Person(const char *name_, Person* father_, Person* mother_){
 }
 
 Person::~Person(){
-    delete children;
+	
+    delete[] children; //CHANGED
+    delete[] name;	//CHANGED
 }
 
 void Person::addChild(Person *newChild){
@@ -49,9 +51,10 @@ void Person::printLineage(char dir, int level){
         }
         if(father){
             cout << temp << "father: " << father->getName() << endl;
-            father->printLineage(dir, level + 1);
+		father->printLineage(dir, level + 1);
         }
     }
+delete[] temp; //CHANGED
 }
 
 /* helper function to compute the lineage
@@ -66,7 +69,8 @@ char* Person::compute_relation(int level){
     for(int i = 2; i <= level; i++){
         char *temp2 = new char[strlen("great ") + strlen(temp) + 1];
         strcat(strcpy(temp2, "great "), temp);
-        temp = temp2;
+        delete[] temp; //CHANGED
+	temp = temp2;
     }
     return temp;
 }
@@ -78,5 +82,6 @@ void expand(Person ***t, int *MAX){
   Person **temp = new Person*[2 * *MAX];
   memcpy(temp, *t, *MAX * sizeof(**t));
   *MAX *= 2;
+  delete []*t; //CHANGED
   *t = temp;
 }
